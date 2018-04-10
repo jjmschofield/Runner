@@ -5,6 +5,7 @@
 * **Runtime:**  `node >= v8.93`
 * **Package Manager:** `npm >= v5.6.0`
 * **Optional:** `Jetbrains IDE (Webstorm / IntelliJ)`
+* **Database Server:** `Postgres v10` 
 
 ### Running the client
 ```
@@ -13,6 +14,70 @@ $ npm install
 $ npm start
 ```
 
+### Running the Server
+```
+$ cd server
+$ npm install
+$ cp .env-example .env
+$ npm start
+```
+
+Note, you will also need to setup your local database for development.
+
+
+#### Setting Up a Local DB
+
+* Create a new datbaase named `runner`
+* Update `.env` with the username and password to use for migrations (`postgres` is ok for local development)
+* Run 
+``` 
+$ npm run database:migrate
+```
+
+## Database Schema
+### Users Schema
+#### Users Table
+Stores basic user data.
+```
+{
+    id: int
+}
+
+```
+#### UserProfile Table
+Stores personally identifable information about a user.
+```
+{
+    user_id: int
+    given_name: varchar(50)
+    family_name: varchar(50)
+    avatar_url: varchar(100)
+    dob: date 
+}
+```
+
+#### UserBio Table
+Stores biometric data about a user (losely termed).
+```
+{
+    user_id: int
+    weight_grams: int 
+}
+```
+
+### Activities Schema
+
+#### Runs Table
+Stores basic user data.
+```
+{
+    user_id: int
+    date: date
+    distance_meters: int
+    duration_seconds: int
+}
+
+```
 ## Design Decisions
 * One repo
   * A single repository has both the client and server code
@@ -29,3 +94,8 @@ $ npm start
   * Care has been taken to seperate the API to independent routers to provide encapsulation - this should ease breaking the project apart later
   * Contributors should not make dependencies between API routes or their children - if you have code which needs to be used by multiple routes it should be extracted to a module under `server/src/common`
   * This practice keeps dependencies clear and will allow us to move common code into npm packages / git submodules later
+* Seperated Schema
+  * We seperate out the database using schemas, this keeps the database logically exncapsulated and allows it to be split in future if required
+* Seperated User Data
+  * User data is split across multiple tables, this helps to prevent data leakage and be more compliant
+

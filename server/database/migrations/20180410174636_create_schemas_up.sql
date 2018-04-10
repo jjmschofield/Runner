@@ -1,0 +1,2 @@
+CREATE SCHEMA users;
+CREATE SCHEMA activities;
