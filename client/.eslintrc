@@ -1,0 +1,32 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "jest/globals": true,
+    "jasmine": true
+  },
+  "plugins": [
+    "jest",
+    "jasmine"
+  ],
+  "rules": {
+    "no-use-before-define": 0,
+    "prefer-promise-reject-errors": 0,
+    "brace-style": [
+      "error",
+      "stroustrup"
+    ],
+    "arrow-body-style": [
+      "error",
+      "always"
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/prefer-stateless-function": "off",
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
+  }
+}
