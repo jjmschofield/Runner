@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon src/server.js",
     "database:seed": "knex --knexfile ./database/knexfile.js seed:run",
     "database:migrate": "knex --knexfile ./database/knexfile.js migrate:latest",
     "database:migration": "knex --knexfile ./database/knexfile.js migrate:make",
