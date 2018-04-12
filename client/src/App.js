@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
+import {} from 'semantic-ui-react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+
+export class App extends Component {
+  constructor(props){
+    super(props);
+    props.fetchUserById(0);
+  }
+
   render() {
     return (
       <div className="App">

@@ -7,4 +7,4 @@ const app = createDefaultExpressApp();
 app.use('/users', createUserRouter());
 app.use('/activities', createActivitiesRouter());
 
-http.createServer(app).listen(3000);
+http.createServer(app).listen(3002);
