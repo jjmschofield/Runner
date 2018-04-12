@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Loader, Dimmer, Container, Divider } from 'semantic-ui-react';
+import { PageHeader } from './components/PageHeader';
 import { UserProfileCard } from './components/UserProfileCard';
 import { RunsTable } from './components/RunsTable';
 import './App.css';
@@ -26,10 +27,11 @@ export class App extends Component {
     if (user && runs) {
       return (
         <div className="App">
+          <PageHeader/>
           <Divider hidden/>
           <Container>
             <UserProfileCard user={user}/>
-            <RunsTable runs={runs} />
+            <RunsTable runs={runs}/>
           </Container>
           <Divider hidden/>
         </div>
