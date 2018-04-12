@@ -137,11 +137,19 @@ Stores biometric data about a user (losely termed).
 }
 ```
 
+#### Stored Procedures
+
+* `users.select_user_profile_and_bio(requestedUserId integer)`
+   * returns joined user, user_profiles and user_bios for a single user
+
+
+
 ### Activities Schema
 #### Runs Table
 Stores runs carried out by users.
 ```
 {
+    id: int
     user_id: int
     date: date
     distance_meters: int
@@ -149,6 +157,32 @@ Stores runs carried out by users.
 }
 
 ```
+
+#### Runs Calc View
+```
+{
+    id: int
+    user_id: int
+    date: date
+    distance_meters: int
+    duration_seconds: int
+    kCalMin: float
+}
+
+```
+
+
+#### Stored Procedures
+* `calc_kph(kilometers float, hours float)
+   * returns a float for a simply kph calculation
+* `calc_vo2_leger(kph float)`
+   * returns the leger based vo2 calc
+* `calc_kcal_min(mass_kg float, vo2 float, respiratory_exchange_ratio float )`
+   * returns the kcal per min calculation
+* `calc_kcal_min_for_run(weight_grams integer, distance_meters integer, duration_seconds integer )`
+   * converts the units stored in run records and returns the kcal per min calculation
+* `select_runs_for_user(requestedUserId integer)`
+   * returns all runs for a user including the calculated kCalMin
 
 ## Caloires Burned Calculation
 The brief specifies this as:
@@ -205,6 +239,7 @@ Once the algo is decided, the proceudre which inserts a new run into the databas
 * There are a lot of linting errors
 * The solution has not been peer reviewed and could probably do with a few refactors
 * Levels of abstraction could be improved especially shorthand syntax used to save time at the cost of future readability
+* Database migration scripts don't feel hugely dry and probably could make use of factories / generators to reduce the amount of ctrl-c, ctrl-v going on
 
 ## Design Decisions
 * One repo
