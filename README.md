@@ -11,7 +11,7 @@ No demo is currently available.
 ## Technical Highlights
 * An approach to building a monolithic architecture which can be easily split into microservices
 * A production ready database migration / database as code strategy (without an ORM) with randomized seed data
-* A database as an api approach - forcing the service/api layer to interact with stored procedures then allowing it to execute sql commands (security and maintainability benefit)
+* A database as an api approach - forcing the service/api layer to interact with stored procedures (security and maintainability benefit)
 * A highly extensible production ready logging system using winston and correlation ID's
 
 ## Getting Started
