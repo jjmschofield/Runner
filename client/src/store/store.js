@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
 import users from './users/usersReducers';
+import runs from './runs/runsReducers';
 
 export function createStore() {
   const reducers = combineReducers({
     users,
+    runs,
   });
 
   const logger = createLogger();

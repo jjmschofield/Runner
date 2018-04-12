@@ -1,10 +1,12 @@
 import { connect } from 'react-redux';
 import { App } from './App';
 import { fetchUserById } from './store/users/actions/fetchUser';
+import { fetchRunsByUserId } from './store/runs/actions/fetchRuns';
 
 const mapStateToProps = (state) => {
   return {
     users: state.users,
+    runs: state.runs,
   };
 };
 
@@ -13,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchUserById: (userId) => {
       return dispatch(fetchUserById(userId));
     },
+    fetchRunsByUserId: (userId) => {
+      return dispatch(fetchRunsByUserId(userId));
+    }
   };
 };
 
