@@ -8,16 +8,22 @@
     "database:migrate": "knex --knexfile ./database/knexfile.js migrate:latest",
     "database:migration": "knex --knexfile ./database/knexfile.js migrate:make",
     "database:rollback": "knex --knexfile ./database/knexfile.js migrate:rollback",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:unit": "jest --config ./jest.config.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "caller": "^1.0.1",
+    "correlation-id": "^2.1.1",
+    "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "helmet": "^3.12.0",
     "knex": "^0.14.5",
-    "pg": "^7.4.1"
+    "on-finished": "^2.3.0",
+    "pg": "^7.4.1",
+    "validator": "^9.4.1",
+    "winston": "^2.4.1"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -28,6 +34,7 @@
     "faker": "^4.1.0",
     "jest": "^22.4.3",
     "jest-junit": "^3.6.0",
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "winston-spy": "^0.2.0"
   }
 }
