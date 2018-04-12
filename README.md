@@ -39,6 +39,55 @@ $ npm run database:migrate
 $ npm run database:seed
 ```
 
+By default the project is setup to create 1000 users with a random number of runs between 0 and 100 each. You can tweak these values as you see fit to test the performance of your queries. Note that when creating a large data set it might take some time as faker.js creates all the random data for you. It is also entirely possible that you'll blow the stack as the seed isn't batched.
+
+## API Endpoints
+### Users
+```
+GET: users/
+returns {}
+
+GET: users/:userId
+returns {
+    id: number,
+    profile: {
+        givenName: string,
+        familyName: string,
+        dob: date,
+        avatarUrl: string
+    }
+    bios: {
+        weight: number
+    }
+}
+
+```
+
+### Activities
+```
+GET: activities
+NOT IMPLEMENTED
+
+GET: activities/runs
+returns {}
+
+GET: activities/runs?userId=int
+returns {
+    runs: [
+        {
+          id: int,
+          userId: int,
+          distance: int,
+          duration: int,
+          date: date
+        }
+    ]
+}
+
+```
+
+
+
 ## Database Schema
 ### Users Schema
 #### Users Table
