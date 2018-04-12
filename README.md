@@ -1,4 +1,18 @@
 # Runner
+Runner is a full stack implementation of a basic run logging application written in Node (+ Express), React (+ Redux) with a Postgres data store.
+
+The project is a response to this [brief](BRIEF.md).
+
+No demo is currently available.
+
+## Capabilities
+* A user can see their past runs with a total kcal burn calculated
+
+## Technical Highlights
+* An approach to building a monolithic architecture which can be easily split into microservices
+* A production ready database migration / database as code strategy (without an ORM) with randomized seed data
+* A database as an api approach - forcing the service/api layer to interact with stored procedures then allowing it to execute sql commands (security and maintainability benefit)
+* A highly extensible production ready logging system using winston and correlation ID's
 
 ## Getting Started
 ### Pre-Reqs
@@ -13,6 +27,11 @@ $ cd client
 $ npm install
 $ npm start
 ```
+ 
+The client will run on `http://localhost:3001`.
+
+Note: Presently on page refresh a random user ID between 0 and 1000 wil be selected as the context for the store.
+
 
 ### Running the Server
 ```
@@ -22,8 +41,7 @@ $ cp .env-example .env
 $ npm start
 ```
 
-
-Note, you will also need to setup your local database for development.
+The server will run on `http://localhost:3002`
 
 
 #### Setting Up a Local DB
@@ -41,7 +59,7 @@ $ npm run database:seed
 
 By default the project is setup to create 1000 users with a random number of runs between 0 and 100 each. You can tweak these values as you see fit to test the performance of your queries. Note that when creating a large data set it might take some time as faker.js creates all the random data for you. It is also entirely possible that you'll blow the stack as the seed isn't batched.
 
-When creating your `.env` you will probably have noticed that each service has it's own username and password to access the DB. You can set up these users with permissions to the required stored procedures for each service (see `src/routes/<service name>/sql/STORED_PROCEDURES`) or set them all to the same. For production usage you should definately have a seperate user for each service with tightly scoped permissions.
+When creating your `.env` you will probably have noticed that each service has it's own username and password to access the DB. You can set up these users with permissions to the required stored procedures for each service (see `src/routes/<service name>/sql/STORED_PROCEDURES`) or set them all to the same. For production usage you should definately have a seperate user for each service with tightly scoped permissions. In future a migration script should create the required users and set permissions accordingly...
 
 ## API Endpoints
 ### Users
@@ -88,8 +106,6 @@ returns {
 
 ```
 
-
-
 ## Database Schema
 ### Users Schema
 #### Users Table
@@ -122,9 +138,8 @@ Stores biometric data about a user (losely termed).
 ```
 
 ### Activities Schema
-
 #### Runs Table
-Stores basic user data.
+Stores runs carried out by users.
 ```
 {
     user_id: int
@@ -149,24 +164,32 @@ This is a fairly simple calculation based around Legers solution for VO2, which 
 The brief also specifies that this calculation might change soon.
 
 There are two approaches to solving this:
- * Store calculations and update them in the future when the algo changes
+ * Store calculations and update them in the future with a db migration when the algo changes
  * Do not store calculations and generate them on request
 
-The later has been employed here, to prevent storing data which we know is going to have be updated in bulk anyway. This kepes the solution flexible and adaptive in the short term.
+The later has been employed here, to prevent storing data which we know is going to have be updated in bulk anyway and there doesn't appear to be a documented requirement to keep this data in a concrete fashion. This kepes the solution flexible and adaptive in the short term by keeping the ammount of data we store and need to reason about minimal.
 
-The choices between were to do this calculation were:
+The choices between where to do this calculation are:
 
+ * UI Layer
  * API layer
  * Data layer
 
-The data layer was picked to prevent the `user` and `activities` API's from needing to request one anothers data. A view is used to accomplish this along with a number of stored procedures to do the work. This has the following drawbacks:
+The data layer was picked as:
+ * A single migration to the database will update the calculation used by any dependent services or clients without code changes, reversing this deicsion if it is a bad one
+ * It prevents the `user` and `activities` API's from needing to request one anothers data
+ * We don't need to worry about updating clients to improve the calculation (more of an issue for mobile then web really)
+
+A view is used to accomplish this along with a number of stored procedures to do the work. This has the following drawbacks:
 
  * Weight is not stored along with the run
     * The calculation will always be based on the users **current** weight and not their weight at the time of the run
-    * A weight wehich fluctuates dramatically will produce noticable effects on the data
+    * A weight which fluctuates dramatically will produce noticable effects on the data
     * Weight could be stored along with the run - however this is duplication of data and is breaking the constraints of our compliant data store
  * At very large scale performance may become an issue
     * The choice at this point is either to turn this into a materialized view or to begin writing the values
+    
+Once the algo is decided, the proceudre which inserts a new run into the database should be extended to add a field calculated by the stored procedure presently doing the calculation.
 
 ## Warnings and Technical Debt
 * **This solution provides no authorization or authentication**
@@ -175,6 +198,13 @@ The data layer was picked to prevent the `user` and `activities` API's from need
   * Alternatively you could bycrpt passwords into the users.users table (but seriously, get some off the shelf OAuth so that you don't have to handle passwords)
   * Finally get the user to sign in via the IdPs STS, then start making use of the resultant JWT
   * For requests where a user is requesting access to get or update their own data, authorization can very easily be achieved by not requesting the ID as a part of the query or post and instead infering it directly from the JWT. Your private/public key signing of the JWT will protect you from fiddling.
+* Test coverage is very low
+  * The majority of `/src/server/lib` is covered with unit test, however the client application as no coverage and the inidividual services and stored procudures also have no coverage
+* There are no integration tests
+* There is no Swagger API documentation
+* There are a lot of linting errors
+* The solution has not been peer reviewed and could probably do with a few refactors
+* Levels of abstraction could be improved especially shorthand syntax used to save time at the cost of future readability
 
 ## Design Decisions
 * One repo
@@ -207,4 +237,3 @@ The data layer was picked to prevent the `user` and `activities` API's from need
   * Weight is recorded in grams (ints)
   * Smaller units may be preferable, depending on the use case for the rest of the application
   * Ints are being prefered to maintain accuracy, though it shuold be fine to flip them to doubles/floats
-
