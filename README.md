@@ -41,6 +41,8 @@ $ npm run database:seed
 
 By default the project is setup to create 1000 users with a random number of runs between 0 and 100 each. You can tweak these values as you see fit to test the performance of your queries. Note that when creating a large data set it might take some time as faker.js creates all the random data for you. It is also entirely possible that you'll blow the stack as the seed isn't batched.
 
+When creating your `.env` you will probably have noticed that each service has it's own username and password to access the DB. You can set up these users with permissions to the required stored procedures for each service (see `src/routes/<service name>/sql/STORED_PROCEDURES`) or set them all to the same. For production usage you should definately have a seperate user for each service with tightly scoped permissions.
+
 ## API Endpoints
 ### Users
 ```
@@ -133,6 +135,39 @@ Stores basic user data.
 
 ```
 
+## Caloires Burned Calculation
+The brief specifies this as:
+
+```
+VO2 ~= 2.209 + 3.1633 * kph
+Kcal/Min ~= 4.86 * massKg * VO2 / 1000
+
+```
+
+This is a fairly simple calculation based around Legers solution for VO2, which does not take account of inclines.
+
+The brief also specifies that this calculation might change soon.
+
+There are two approaches to solving this:
+ * Store calculations and update them in the future when the algo changes
+ * Do not store calculations and generate them on request
+
+The later has been employed here, to prevent storing data which we know is going to have be updated in bulk anyway. This kepes the solution flexible and adaptive in the short term.
+
+The choices between were to do this calculation were:
+
+ * API layer
+ * Data layer
+
+The data layer was picked to prevent the `user` and `activities` API's from needing to request one anothers data. A view is used to accomplish this along with a number of stored procedures to do the work. This has the following drawbacks:
+
+ * Weight is not stored along with the run
+    * The calculation will always be based on the users **current** weight and not their weight at the time of the run
+    * A weight wehich fluctuates dramatically will produce noticable effects on the data
+    * Weight could be stored along with the run - however this is duplication of data and is breaking the constraints of our compliant data store
+ * At very large scale performance may become an issue
+    * The choice at this point is either to turn this into a materialized view or to begin writing the values
+
 ## Warnings and Technical Debt
 * **This solution provides no authorization or authentication**
   * This is a big one, do not put live users data into this system
@@ -161,4 +196,15 @@ Stores basic user data.
   * We seperate out the database using schemas, this keeps the database logically exncapsulated and allows it to be split in future if required
 * Seperated User Data
   * User data is split across multiple tables, this helps to prevent data leakage and be more compliant
+* The Service Layer Must Use Stored Procedures
+  * The stored procedures in the database offer up an API of what can / can't be done 
+  * This provides fine tuned permissions for what database users can and can't do
+  * This protects against SQL injection attacks if they are not caught at the service layer
+  * This means that the database offers up an API, so that the service layer doesn't have to worry / track implementation details
+* Units of measurment
+  * Time is recorded in seconds (ints)
+  * Distance is recorded in meters (ints)
+  * Weight is recorded in grams (ints)
+  * Smaller units may be preferable, depending on the use case for the rest of the application
+  * Ints are being prefered to maintain accuracy, though it shuold be fine to flip them to doubles/floats
 
