@@ -1,27 +1,28 @@
+const validator = require('validator');
 const { respond, respondNotFound, respondUnexpectedError, respondBadRequest } = require('../../lib/express/utils/responseUtils');
 const { log, LOG_EVENTS } = require('../../lib/logger/logger');
 const { isValidInt } = require('../../lib/validators/paramValidators');
-const { getUserFromStoreById } = require('../models/User');
+const { getRunsFromStoreByUserId } = require('../models/Run');
 
 module.exports = {
-  userGetController: async (req, res) => {
-    // TODO - be aware, this endpoint will return ANY user without checking authorization to access the record
-    const { userId } = req.params;
+  runsGetController: async (req, res) => {
+    // TODO - be aware, this endpoint will return ANY users runs without checking authorization to access the record
+    const { userId } = req.query;
     if (!isValidInt(userId)) {
       respondBadRequest(req, res);
       return;
     }
 
     try {
-      const user = await getUserFromStoreById(req.pgPool, userId);
+      const runs = await getRunsFromStoreByUserId(req.pgPool, userId);
 
-      if (!user) {
+      if (!runs) {
         respondNotFound(req, res);
         return;
       }
 
       respond(req, res, {
-        user,
+        runs,
       });
     }
     catch (error) {
