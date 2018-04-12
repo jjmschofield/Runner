@@ -1,5 +1,5 @@
 const { STORED_PROCEDURES } = require('./sql/STORED_PROCEDURES');
-const { callFunction } = require('../../lib/pg/callFunction');
+const { callFunction } = require('../../../lib/pg/callFunction');
 
 class Run {
   constructor({ id, userId, distance, duration, date, kCalMin }) {

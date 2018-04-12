@@ -1,7 +1,7 @@
 const validator = require('validator');
-const { respond, respondNotFound, respondUnexpectedError, respondBadRequest } = require('../../lib/express/utils/responseUtils');
-const { log, LOG_EVENTS } = require('../../lib/logger/logger');
-const { isValidInt } = require('../../lib/validators/paramValidators');
+const { respond, respondNotFound, respondUnexpectedError, respondBadRequest } = require('../../../lib/express/utils/responseUtils');
+const { log, LOG_EVENTS } = require('../../../lib/logger/logger');
+const { isValidInt } = require('../../../lib/validators/paramValidators');
 const { getRunsFromStoreByUserId } = require('../models/Run');
 
 module.exports = {

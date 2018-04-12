@@ -1,6 +1,6 @@
-const { respond, respondNotFound, respondUnexpectedError, respondBadRequest } = require('../../lib/express/utils/responseUtils');
-const { log, LOG_EVENTS } = require('../../lib/logger/logger');
-const { isValidInt } = require('../../lib/validators/paramValidators');
+const { respond, respondNotFound, respondUnexpectedError, respondBadRequest } = require('../../../lib/express/utils/responseUtils');
+const { log, LOG_EVENTS } = require('../../../lib/logger/logger');
+const { isValidInt } = require('../../../lib/validators/paramValidators');
 const { getUserFromStoreById } = require('../models/User');
 
 module.exports = {
