@@ -5,10 +5,15 @@ module.exports = {
       msg: 'RESPONSE_RESPONDING_OK',
       description: 'Responding 200 OK to client',
     },
-    RESPONDING_UNAUTHORIZED: {
-      id: 'RES_401',
-      msg: 'RESPONSE_RESPONDING_UNAUTHORIZED',
-      description: 'Responding 401 to client',
+    RESPONDING_BAD_REQUEST: {
+      id: 'RES_400',
+      msg: 'RESPONSE_RESPONDING_BAD_REQUEST',
+      description: 'Responding 400 to client',
+    },
+    RESPONDING_NOT_FOUND: {
+      id: 'RES_404',
+      msg: 'RESPONSE_RESPONDING_NOT_FOUND',
+      description: 'Responding 404 to client',
     },
     RESPONDING_UNEXPECTED_ERROR: {
       id: 'RES_500',

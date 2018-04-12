@@ -22,6 +22,7 @@ $ cp .env-example .env
 $ npm start
 ```
 
+
 Note, you will also need to setup your local database for development.
 
 
@@ -29,9 +30,13 @@ Note, you will also need to setup your local database for development.
 
 * Create a new datbaase named `runner`
 * Update `.env` with the username and password to use for migrations (`postgres` is ok for local development)
-* Run 
+* To get the latest version of the database run: 
 ``` 
 $ npm run database:migrate
+```
+* To add some useful data to the database run:
+``` 
+$ npm run database:seed
 ```
 
 ## Database Schema
@@ -78,6 +83,15 @@ Stores basic user data.
 }
 
 ```
+
+## Warnings and Technical Debt
+* **This solution provides no authorization or authentication**
+  * This is a big one, do not put live users data into this system
+  * Getting there should be easy, simply pick and IdP and implement OAuth (you will want to extend the users.users table to include the IdP's user ID so you can relate them)
+  * Alternatively you could bycrpt passwords into the users.users table (but seriously, get some off the shelf OAuth so that you don't have to handle passwords)
+  * Finally get the user to sign in via the IdPs STS, then start making use of the resultant JWT
+  * For requests where a user is requesting access to get or update their own data, authorization can very easily be achieved by not requesting the ID as a part of the query or post and instead infering it directly from the JWT. Your private/public key signing of the JWT will protect you from fiddling.
+
 ## Design Decisions
 * One repo
   * A single repository has both the client and server code
@@ -91,8 +105,8 @@ Stores basic user data.
 * Monolithic Service
   * Due to the size of the project a single API and database is provided
   * This simplifies dependency managment and deployments at the cost of workflow and deployment flexibility
-  * Care has been taken to seperate the API to independent routers to provide encapsulation - this should ease breaking the project apart later
-  * Contributors should not make dependencies between API routes or their children - if you have code which needs to be used by multiple routes it should be extracted to a module under `server/src/common`
+  * Care has been taken to seperate the API to independent routers to provide encapsulation - this should ease breaking the project apart later, as these routers apply their isolated middleware and have their own db connection pools
+  * Contributors should not make dependencies between API routes or their children - if you have code which needs to be used by multiple routes it should be extracted to a module under `server/src/lib`
   * This practice keeps dependencies clear and will allow us to move common code into npm packages / git submodules later
 * Seperated Schema
   * We seperate out the database using schemas, this keeps the database logically exncapsulated and allows it to be split in future if required

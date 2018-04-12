@@ -38,6 +38,32 @@ describe('src/lib/express/responseUtils.js', () => {
     });
   });
 
+  describe('respondBadRequest', () => {
+    it('should apply the status code 500', () => {
+      underTest.respondBadRequest(mockReq, mockRes);
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+    });
+
+    it('should log the event', () => {
+      const expectedEvent = mockLogger.LOG_EVENTS.RESPONSE.RESPONDING_BAD_REQUEST;
+      underTest.respondBadRequest(mockReq, mockRes);
+      expect(mockLogger.log.info).toHaveBeenCalledWith(expectedEvent);
+    });
+  });
+
+  describe('respondNotFound', () => {
+    it('should apply the status code 404', () => {
+      underTest.respondNotFound(mockReq, mockRes);
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+    });
+
+    it('should log the event', () => {
+      const expectedEvent = mockLogger.LOG_EVENTS.RESPONSE.RESPONDING_NOT_FOUND;
+      underTest.respondNotFound(mockReq, mockRes);
+      expect(mockLogger.log.info).toHaveBeenCalledWith(expectedEvent);
+    });
+  });
+
   describe('respondUnexpectedError', () => {
     it('should apply the status code 500', () => {
       underTest.respondUnexpectedError(mockReq, mockRes);
