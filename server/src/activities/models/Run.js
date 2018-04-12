@@ -2,11 +2,12 @@ const { STORED_PROCEDURES } = require('./sql/STORED_PROCEDURES');
 const { callFunction } = require('../../lib/pg/callFunction');
 
 class Run {
-  constructor({ id, userId, distance, duration }) {
+  constructor({ id, userId, distance, duration, date }) {
     this.id = id;
     this.userId = userId;
     this.distance = distance;
     this.duration = duration;
+    this.date = date;
   }
 }
 
@@ -30,6 +31,7 @@ const createUserFromUserInStore = (runInStore) => {
     userId: runInStore.user_id,
     distance: runInStore.distance_meters,
     duration: runInStore.duration_seconds,
+    date: runInStore.date,
   });
 };
 
