@@ -1,0 +1,1 @@
+DROP FUNCTION users.select_user_profile_and_bio;
