@@ -1,6 +1,6 @@
 const http = require('http');
 const { createDefaultExpressApp } = require('./lib/express/appFactory');
-const { createUserRouter } = require('./user/router');
+const { createUserRouter } = require('./users/router');
 
 const app = createDefaultExpressApp();
 app.use('/users', createUserRouter());
