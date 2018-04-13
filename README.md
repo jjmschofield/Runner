@@ -234,7 +234,7 @@ Once the algo is decided, the proceudre which inserts a new run into the databas
   * Finally get the user to sign in via the IdPs STS, then start making use of the resultant JWT
   * For requests where a user is requesting access to get or update their own data, authorization can very easily be achieved by not requesting the ID as a part of the query or post and instead infering it directly from the JWT. Your private/public key signing of the JWT will protect you from fiddling.
 * Test coverage is very low
-  * The majority of `/src/server/lib` is covered with unit test, however the client application as no coverage and the inidividual services and stored procudures also have no coverage
+  * The majority of `/src/server/lib` is covered with unit tests, however the client application has no coverage and the inidividual services and stored procudures also have no coverage
 * There are no integration tests
 * There is no Swagger API documentation
 * There are a lot of linting errors
