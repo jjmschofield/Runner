@@ -8,7 +8,7 @@ module.exports = {
     // TODO - be aware, this endpoint will allow anyone to add a run to anyone as there is no auth
     const { userId, distance, duration, date } = req.body;
 
-    if (!isValidInt(userId) || !isValidInt(distance) || !isValidInt(duration) || !isValidDate(date)) {
+    if (!inputsAreValidType({ userId, distance, duration, date }) || !duration > 1 || !distance > 0) {
       respondBadRequest(req, res);
       return;
     }
@@ -31,3 +31,7 @@ module.exports = {
     }
   },
 };
+
+function inputsAreValidType({ userId, distance, duration, date }) {
+  return isValidInt(userId) && isValidInt(distance) && isValidInt(duration) && isValidDate(date);
+}
