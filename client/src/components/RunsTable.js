@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Loader, Dimmer, Table, Statistic, Label } from 'semantic-ui-react';
+import { Loader, Dimmer, Table, Statistic, Label, Button, Icon } from 'semantic-ui-react';
 import { getTime } from 'date-fns';
 import { toStandardDateFormat } from '../utils/dateUtils';
 
@@ -57,6 +57,18 @@ export class RunsTable extends Component {
     if (this.props.runs) {
       return (
         <Table fluid striped>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell colSpan='3' />
+              <Table.HeaderCell>
+                <Button primary basic floated="right"
+                        onClick={this.props.addRunOnClick}>
+                  <Icon name='plus' />
+                  Add Run
+                </Button>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
           <Table.Body>
             {this.renderRuns(this.props.runs)}
           </Table.Body>

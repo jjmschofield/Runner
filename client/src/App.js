@@ -3,6 +3,7 @@ import { Loader, Dimmer, Container, Divider } from 'semantic-ui-react';
 import { PageHeader } from './components/PageHeader';
 import { UserProfileCard } from './components/UserProfileCard';
 import { RunsTable } from './components/RunsTable';
+import { RunsAddModal } from './components/RunsAddModal';
 import './App.css';
 
 const userId = Math.floor(Math.random() * Math.floor(999));
@@ -18,7 +19,20 @@ export class App extends Component {
     if (!props.runs.runsByUserId[userId]) {
       props.fetchRunsByUserId(userId);
     }
+
+    this.state = {
+      modalOpen: false,
+    };
+
+    this.toggleModal = this.toggleModal.bind(this);
   }
+
+  toggleModal() {
+    this.setState({
+      modalOpen: !this.state.modalOpen,
+    });
+  }
+
 
   render() {
     const user = this.props.users.usersById[userId];
@@ -31,9 +45,15 @@ export class App extends Component {
           <Divider hidden/>
           <Container>
             <UserProfileCard user={user}/>
-            <RunsTable runs={runs}/>
+            <RunsTable runs={runs} addRunOnClick={this.toggleModal}/>
           </Container>
           <Divider hidden/>
+          <RunsAddModal
+            open={this.state.modalOpen}
+            addRun={this.props.addRun}
+            close={this.toggleModal}
+            onClose={this.toggleModal}
+            userId={userId}/>
         </div>
       );
     }

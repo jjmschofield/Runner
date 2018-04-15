@@ -241,6 +241,9 @@ Once the algo is decided, the proceudre which inserts a new run into the databas
 * The solution has not been peer reviewed and could probably do with a few refactors
 * Levels of abstraction could be improved especially shorthand syntax used to save time at the cost of future readability
 * Database migration scripts don't feel hugely dry and probably could make use of factories / generators to reduce the amount of ctrl-c, ctrl-v going on
+* Prop Types aren't checked
+* Form validation needs work
+* React app needs to be broken into components more effectively
 
 ## Design Decisions
 * One repo
