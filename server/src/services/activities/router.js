@@ -5,6 +5,7 @@ const { createPool } = require('../../lib/pg/createPool');
 const { createPgConnectionPoolMiddleware } = require('../../lib/pg/middleware/pgConnectionPoolMiddleware');
 const { rootController } = require('./controllers/rootController');
 const { runsGetController } = require('./controllers/runsGetController');
+const { runsPutController } = require('./controllers/runsPutController');
 
 const envVarsLoaded = () => {
   return process.env.DB_ACTIVITIES_SERVICE_USER && process.env.DB_ACTIVITIES_SERVICE_PASSWORD;
@@ -29,6 +30,7 @@ const createActivitiesRouter = () => {
 
   router.get('/', rootController);
   router.get('/runs', runsGetController);
+  router.put('/runs', runsPutController);
 
   return router;
 };

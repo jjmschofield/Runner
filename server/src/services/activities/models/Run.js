@@ -26,6 +26,22 @@ const getRunsFromStoreByUserId = async (pgConnectionPool, userId) => {
   return runs;
 };
 
+const addRunToStoreByUserId = async (pgConnectionPool, { userId, duration, distance, date }) => {
+  const addStoreResponse = await callFunction(pgConnectionPool, STORED_PROCEDURES.ADD_RUN_FOR_USER, [
+    userId,
+    distance,
+    duration,
+    `'${date}'`,
+  ]);
+
+  // Note, we make a second request here as kCalMin is calculated by the view and is not available from just the insert
+  const getStoreResponse = await callFunction(pgConnectionPool, STORED_PROCEDURES.SELECT_RUN_BY_ID, [
+    addStoreResponse.rows[0].id,
+  ]);
+
+  return createUserFromUserInStore(getStoreResponse.rows[0]);
+};
+
 const createUserFromUserInStore = (runInStore) => {
   return new Run({
     id: runInStore.id,
@@ -41,4 +57,5 @@ const createUserFromUserInStore = (runInStore) => {
 module.exports = {
   Run,
   getRunsFromStoreByUserId,
+  addRunToStoreByUserId,
 };
