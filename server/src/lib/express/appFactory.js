@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const { setCommonSecurityHeaders } = require('./middleware/securityHeaderMiddleware');
 const { logRequestStart, logRequestEnd } = require('../logger/middleware/requestLoggersMiddleware');
 const { setCorrelationId } = require('../logger/middleware/correlationIdMiddleware');
-const { unexpectedErrorHandler } = require('./middleware/errorHandlerMiddleware');
+const { unexpectedErrorHandler } = require('./middleware/errorHandlerMiddleware')
 
 module.exports = {
   createDefaultExpressApp: () => {
@@ -21,6 +22,7 @@ module.exports = {
 function applyMiddleware(app) {
   applySecurityMiddleware(app);
   applyLoggerMiddleware(app);
+  app.use(bodyParser.json());
 }
 
 function applyErrorHandlerMiddleware(app) {
