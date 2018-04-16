@@ -7,6 +7,7 @@ No demo is currently available.
 
 ## Capabilities
 * A user can see their past runs with a total kcal burn calculated
+* A user can add a new run
 
 ## Technical Highlights
 * An approach to building a monolithic architecture which can be easily split into microservices
