@@ -9,7 +9,9 @@
     "database:migrate": "knex --knexfile ./database/knexfile.js migrate:latest",
     "database:migration": "knex --knexfile ./database/knexfile.js migrate:make",
     "database:rollback": "knex --knexfile ./database/knexfile.js migrate:rollback",
-    "test:unit": "jest --config ./jest.config.js"
+    "test:unit": "jest --config ./jest.config.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "",
   "license": "MIT",
@@ -22,11 +24,12 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "helmet": "^3.12.0",
-    "knex": "^0.14.5",
+    "knex": "^0.16.4",
     "on-finished": "^2.3.0",
     "pg": "^7.4.1",
     "validator": "^9.4.1",
-    "winston": "^2.4.1"
+    "winston": "^2.4.1",
+    "snyk": "^1.345.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -39,5 +42,6 @@
     "jest-junit": "^3.6.0",
     "nodemon": "^1.17.3",
     "winston-spy": "^0.2.0"
-  }
+  },
+  "snyk": true
 }
